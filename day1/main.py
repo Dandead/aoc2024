@@ -1,6 +1,4 @@
-# Defining merge sorting algorithm
-
-def merge(left: list, right: list) -> list:
+def merge(left: list[int], right: list[int]) -> list[int]:
     result = []
     index_left = index_right = 0
 
@@ -19,30 +17,37 @@ def merge(left: list, right: list) -> list:
             break
     return result
 
-def merge_sort(array: list) -> list:
+def merge_sort(array: list[int]) -> list[int]:
     if len(array) <= 1:
         return array
     mid = len(array) // 2
-    left = merge_sort(array[:mid])
-    right = merge_sort(array[mid:])
-    return merge(left, right)
+    left = merge_sort(array[:mid])  # Splits list, until merge_sort -
+    right = merge_sort(array[mid:]) # - returns a list with lenght 1
+    return merge(left, right)       # and then merge them
 
-# Set up lists of data
 
-first_list = []
-second_list = []
+if __name__ == "__main__":
+    first_list = []
+    second_list = []
 
-with open("data.txt", "r") as data:
-    for line in data:
-        first, second = line.split()
-        first_list.append(first)
-        second_list.append(second)
+    with open("data.txt", "r") as data:
+        for line in data:
+            first, second = line.strip().split()
+            first_list.append(int(first))
+            second_list.append(int(second))
 
-first_sorted = merge_sort(first_list)
-second_sorted = merge_sort(second_list)
+    first_sorted = merge_sort(first_list)
+    second_sorted = merge_sort(second_list)
 
-result = 0
-for i in range(0, len(first_sorted)):
-    result += abs(int(first_sorted[i])-int(second_sorted[i]))
+    diff_result = 0
+    sim_result = 0
+    sim_control_set = set()
+    for index, value in enumerate(first_sorted):
+        diff_result += abs(first_sorted[index]-second_sorted[index])
+        if value not in sim_control_set:
+            sim_result += value * second_list.count(value)
+        else:
+            sim_control_set.add(value)
 
-print(result)
+    print(f'First answer:{diff_result}')
+    print(f'Second answer: {sim_result}')

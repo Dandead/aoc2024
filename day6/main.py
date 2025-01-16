@@ -51,6 +51,8 @@ class Guard:
                 return (self.x_pos, self.y_pos + 1)
             case "<":
                 return (self.x_pos - 1, self.y_pos)
+            case _:
+                return (self.x_pos, self.y_pos)
 
 
 def parse_map(text: str) -> tuple[list[list[str]], set[tuple[int, int]], tuple[int, int]]:
